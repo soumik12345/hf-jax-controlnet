@@ -1078,7 +1078,7 @@ def main():
                 and global_step % args.validation_steps == 0
                 and jax.process_index() == 0
             ):
-                _, wandb_table = log_validation(pipeline, pipeline_params, state.params, tokenizer, args, validation_rng, weight_dtype)
+                _, wandb_table = log_validation(pipeline, pipeline_params, state.params, tokenizer, args, validation_rng, weight_dtype, global_step, wandb_table)
 
             if global_step % args.logging_steps == 0 and jax.process_index() == 0:
                 if args.report_to == "wandb":
@@ -1114,7 +1114,7 @@ def main():
         if args.validation_prompt is not None:
             if args.profile_validation:
                 jax.profiler.start_trace(args.output_dir)
-            image_logs, wandb_table = log_validation(pipeline, pipeline_params, state.params, tokenizer, args, validation_rng, weight_dtype)
+            image_logs, wandb_table = log_validation(pipeline, pipeline_params, state.params, tokenizer, args, validation_rng, weight_dtype, global_step, wandb_table)
             if args.profile_validation:
                 jax.profiler.stop_trace()
         else:
